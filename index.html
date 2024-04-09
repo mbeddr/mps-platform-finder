@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Platform Version Finder</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<style>
+    .form-group {
+    margin-bottom: 1rem; 
+  }
+</style>
+</head>
+<body>
+    <div class="container mt-5">
+        
+        <h1>Platform Version Finder</h1>
+        <form id="search-form">
+            <div class="form-group row">
+                <label for="mps-gradle-plugin" class="col-sm-3 col-form-label">mps-gradle-plugin:</label>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" id="mps-gradle-plugin" placeholder="de.itemis.mps:mps-gradle-plugin:1.23.1.412.a54f29f">
+                </div>
+                <div class="col-sm-4">
+                    <button type="submit" data-repo="mps-gradle-plugin" class="btn btn-primary commit_btn">Go to commit</button>
+                    <button type="submit" data-repo="mps-gradle-plugin" class="btn btn-primary nexus_btn">Go to Nexus</button>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="mps-gradle-plugin" class="col-sm-3 col-form-label">MPS-extensions:</label>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" id="mps-extensions" placeholder="de.itemis.mps:extensions:2022.2.2840.97940db">
+                </div>
+                <div class="col-sm-4">
+                    <button type="submit" data-repo="mps-extensions" class="btn btn-primary commit_btn">Go to commit</button>
+                    <button type="submit" data-repo="mps-extensions" class="btn btn-primary nexus_btn">Go to Nexus</button>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="mps-gradle-plugin" class="col-sm-3 col-form-label">mbeddr:</label>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" id="mbeddr" placeholder="com.mbeddr:20213.2023.2.24470.27138a1">
+                </div>
+                <div class="col-sm-4">
+                    <button type="submit" data-repo="mbeddr" class="btn btn-primary commit_btn">Go to commit</button>
+                    <button type="submit" data-repo="mbeddr" class="btn btn-primary nexus_btn">Go to Nexus</button>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="mps-gradle-plugin" class="col-sm-3 col-form-label">iets3.opensource:</label>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" id="iets3" placeholder="org.iets3.opensource:2022.2.7074.375c7f2">
+                </div>
+                <div class="col-sm-4">
+                    <button type="submit" data-repo="iets3" class="btn btn-primary commit_btn">Go to commit</button>
+                    <button type="submit" data-repo="iets3" class="btn btn-primary nexus_btn">Go to Nexus</button>
+                </div>
+            </div>    
+        </form>
+    </div>
+    
+<!-- Bootstrap and jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+<script>
+$("#search-form").on('submit', function(e){
+    e.preventDefault();
+});
+
+$('.commit_btn').click(function(e) {
+    var repo = $(e.currentTarget).data('repo');
+    redirectToCommit(repo);
+});
+
+$('.nexus_btn').click(function(e) {
+    var repo = $(e.currentTarget).data('repo');
+    redirectToNexus(repo);
+});
+
+function redirectToCommit(repo) {
+  var baseUrl = "";
+  switch(repo) {
+    case 'mps-gradle-plugin': baseUrl = 'https://github.com/mbeddr/mps-gradle-plugin'; break;
+    case 'mps-extensions': baseUrl = 'https://github.com/JetBrains/MPS-extensions'; break;
+    case 'mbeddr': baseUrl = 'https://github.com/mbeddr/mbeddr.core'; break;
+    case 'iets3': baseUrl = 'https://github.com/IETS3/iets3.opensource'; break;
+  }
+  var version = $('#'+ repo).val()
+  console.log("Version:"+ version+ " Repo:"+ repo)
+  var commitHash = version.split('.').pop(); // Assumes the commit hash is after the last dot
+  if(commitHash) {
+    window.location.href = baseUrl + '/commit/' + commitHash;
+  } else {
+    alert('Invalid version format. Please include the commit hash.');
+  }
+}
+
+function redirectToNexus(repo) {
+    var group = "";
+  switch(repo) {
+    case 'mps-gradle-plugin': group = 'de.itemis.mps'; break;
+    case 'mps-extensions': group = 'de.itemis.mps'; break;
+    case 'mbeddr': group = 'com.mbeddr'; break;
+    case 'iets3': group = 'org.iets3'; break;
+  }
+  var fullVersion = $('#'+ repo).val();
+  var version = fullVersion.split(':').pop();
+  if(version && version.startsWith("#")) {
+    version = version.substring(1);
+  }
+  if(version) {
+    window.location.href = 'https://artifacts.itemis.cloud/#browse/search=keyword%3D' + group + '%20AND%20version%3D' + version
+  } else {
+    alert('Invalid version.');
+  }
+}
+</script>
+</body>
+</html>
