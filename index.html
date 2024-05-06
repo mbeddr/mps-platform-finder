@@ -55,7 +55,17 @@
                     <button type="submit" data-repo="iets3" class="btn btn-primary commit_btn">Go to commit</button>
                     <button type="submit" data-repo="iets3" class="btn btn-primary nexus_btn">Go to Nexus</button>
                 </div>
-            </div>    
+            </div>
+            <div class="form-group row">
+              <label for="mps-gradle-plugin" class="col-sm-3 col-form-label">iets3.core:</label>
+              <div class="col-sm-5">
+                  <input type="text" class="form-control" id="iets3core" placeholder="org.iets3.core:2022.2.9344.c417751">
+              </div>
+              <div class="col-sm-4">
+                  <button type="submit" data-repo="iets3core" class="btn btn-primary commit_btn">Go to commit</button>
+                  <button type="submit" data-repo="iets3core" class="btn btn-primary nexus_btn">Go to Nexus</button>
+              </div>
+          </div>    
         </form>
     </div>
     
@@ -85,6 +95,7 @@ function redirectToCommit(repo) {
     case 'mps-extensions': baseUrl = 'https://github.com/JetBrains/MPS-extensions'; break;
     case 'mbeddr': baseUrl = 'https://github.com/mbeddr/mbeddr.core'; break;
     case 'iets3': baseUrl = 'https://github.com/IETS3/iets3.opensource'; break;
+    case 'iets3core': baseUrl = 'https://github.com/IETS3/iets3.core'; break;
   }
   var version = $('#'+ repo).val()
   console.log("Version:"+ version+ " Repo:"+ repo)
@@ -103,6 +114,7 @@ function redirectToNexus(repo) {
     case 'mps-extensions': group = 'de.itemis.mps'; break;
     case 'mbeddr': group = 'com.mbeddr'; break;
     case 'iets3': group = 'org.iets3'; break;
+    case 'iets3core': group = 'org.iets3.core'; break;
   }
   var fullVersion = $('#'+ repo).val();
   var version = fullVersion.split(':').pop();
